@@ -1,0 +1,271 @@
+C:\Users\Komati Satya>snowsql -a DK51695.us-east-2.aws -u SATYAKOMATI
+Password:
+* SnowSQL * v1.2.32
+Type SQL statements or !help
+SATYAKOMATI#COMPUTE_WH@(no database).(no schema)>use WAREHOUSE COMPUTE_WH;
++----------------------------------+
+| status                           |
+|----------------------------------|
+| Statement executed successfully. |
++----------------------------------+
+1 Row(s) produced. Time Elapsed: 0.309s
+SATYAKOMATI#COMPUTE_WH@(no database).(no schema)>use MYDB;
++----------------------------------+
+| status                           |
+|----------------------------------|
+| Statement executed successfully. |
++----------------------------------+
+1 Row(s) produced. Time Elapsed: 0.316s
+SATYAKOMATI#COMPUTE_WH@MYDB.PUBLIC>use SCHEMA PUBLIC;
++----------------------------------+
+| status                           |
+|----------------------------------|
+| Statement executed successfully. |
++----------------------------------+
+1 Row(s) produced. Time Elapsed: 0.366s
+SATYAKOMATI#COMPUTE_WH@MYDB.PUBLIC>select * from Orders;
++----------+--------+--------+----------+-------------+------------------+
+| ORDER_ID | AMOUNT | PROFIT | QUANTITY | CATEGORY    | SUBCATEGORY      |
+|----------+--------+--------+----------+-------------+------------------|
+| B-25601  |   1275 |  -1148 |        7 | Furniture   | Bookcases        |
+| B-25601  |     66 |    -12 |        5 | Clothing    | Stole            |
+| B-25601  |      8 |     -2 |        3 | Clothing    | Hankerchief      |
+| B-25601  |     80 |    -56 |        4 | Electronics | Electronic Games |
+| B-25602  |    168 |   -111 |        2 | Electronics | Phones           |
+| B-25602  |    424 |   -272 |        5 | Electronics | Phones           |
+| B-25602  |   2617 |   1151 |        4 | Electronics | Phones           |
+| B-25602  |    561 |    212 |        3 | Clothing    | Saree            |
+
+SATYAKOMATI#COMPUTE_WH@MYDB.PUBLIC>PUT file://D:\Snowflake\Csvfiles\House.csv @~/staged;
++-----------+--------------+-------------+-------------+--------------------+--------------------+----------+---------+
+| source    | target       | source_size | target_size | source_compression | target_compression | status   | message |
+|-----------+--------------+-------------+-------------+--------------------+--------------------+----------+---------|
+| House.csv | House.csv.gz |         207 |         160 | NONE               | GZIP               | UPLOADED |         |
++-----------+--------------+-------------+-------------+--------------------+--------------------+----------+---------+
+1 Row(s) produced. Time Elapsed: 3.746s
+SATYAKOMATI#COMPUTE_WH@MYDB.PUBLIC>PUT file://D:\Snowflake\Csvfiles\income.csv @~/staged;
++------------+---------------+-------------+-------------+--------------------+--------------------+----------+---------+
+| source     | target        | source_size | target_size | source_compression | target_compression | status   | message |
+|------------+---------------+-------------+-------------+--------------------+--------------------+----------+---------|
+| income.csv | income.csv.gz |         384 |         272 | NONE               | GZIP               | UPLOADED |         |
++------------+---------------+-------------+-------------+--------------------+--------------------+----------+---------+
+1 Row(s) produced. Time Elapsed: 4.679s
+SATYAKOMATI#COMPUTE_WH@MYDB.PUBLIC>list @~/staged;
++----------------------+------+----------------------------------+------------------------------+
+| name                 | size | md5                              | last_modified                |
+|----------------------+------+----------------------------------+------------------------------|
+| staged/House.csv.gz  |  160 | 61066ff6b5a3e9079de8796f74c0bfcb | Fri, 3 May 2024 10:43:49 GMT |
+| staged/income.csv.gz |  272 | 2059eb29bb39c076f85940665952ae2d | Fri, 3 May 2024 10:50:17 GMT |
++----------------------+------+----------------------------------+------------------------------+
+2 Row(s) produced. Time Elapsed: 0.417s
+SATYAKOMATI#COMPUTE_WH@MYDB.PUBLIC>PUT file://D:\Snowflake\Csvfiles\income.csv @%/income_table;
+390114 (08001): None: Authentication token has expired.  The user must authenticate again.
+Password:
+* SnowSQL * v1.2.32
+Type SQL statements or !help
+SATYAKOMATI#COMPUTE_WH@MYDB.PUBLIC>PUT file://D:\Snowflake\Csvfiles\income.csv @%/income_table;
+001012 (42601): SQL compilation error:
+missing stage name in URL: com.snowflake.sql.common.LiteralSupplier$1@6d3877d
+SATYAKOMATI#COMPUTE_WH@MYDB.PUBLIC>PUT file://D:\Snowflake\Csvfiles\income.csv @%/income_table;
+001012 (42601): SQL compilation error:
+missing stage name in URL: com.snowflake.sql.common.LiteralSupplier$1@2b15d756
+SATYAKOMATI#COMPUTE_WH@MYDB.PUBLIC>select * from income_table;
++------+-----+--------+
+| NAME | AGE | INCOME |
+|------+-----+--------|
++------+-----+--------+
+0 Row(s) produced. Time Elapsed: 0.415s
+SATYAKOMATI#COMPUTE_WH@MYDB.PUBLIC>PUT file://D:\Snowflake\Csvfiles\income.csv @%income_table;
++------------+---------------+-------------+-------------+--------------------+--------------------+----------+---------+
+| source     | target        | source_size | target_size | source_compression | target_compression | status   | message |
+|------------+---------------+-------------+-------------+--------------------+--------------------+----------+---------|
+| income.csv | income.csv.gz |         381 |         272 | NONE               | GZIP               | UPLOADED |         |
++------------+---------------+-------------+-------------+--------------------+--------------------+----------+---------+
+1 Row(s) produced. Time Elapsed: 4.505s
+SATYAKOMATI#COMPUTE_WH@MYDB.PUBLIC>list @%income_table;
++---------------+------+----------------------------------+------------------------------+
+| name          | size | md5                              | last_modified                |
+|---------------+------+----------------------------------+------------------------------|
+| income.csv.gz |  272 | 26ca84be74d33098b87c02385f8a691a | Sun, 5 May 2024 05:55:38 GMT |
++---------------+------+----------------------------------+------------------------------+
+1 Row(s) produced. Time Elapsed: 0.430s
+SATYAKOMATI#COMPUTE_WH@MYDB.PUBLIC>PUT file://D:\Snowflake\Csvfiles\income.csv @%income_table;
++------------+---------------+-------------+-------------+--------------------+--------------------+---------+---------+
+| source     | target        | source_size | target_size | source_compression | target_compression | status  | message |
+|------------+---------------+-------------+-------------+--------------------+--------------------+---------+---------|
+| income.csv | income.csv.gz |         381 |           0 | NONE               | GZIP               | SKIPPED |         |
++------------+---------------+-------------+-------------+--------------------+--------------------+---------+---------+
+1 Row(s) produced. Time Elapsed: 3.309s
+SATYAKOMATI#COMPUTE_WH@MYDB.PUBLIC>CREATE SCHEMA IF NOT EXISTS mydb.internal_stages;
++----------------------------------------------+
+| status                                       |
+|----------------------------------------------|
+| Schema INTERNAL_STAGES successfully created. |
++----------------------------------------------+
+1 Row(s) produced. Time Elapsed: 0.511s
+SATYAKOMATI#COMPUTE_WH@MYDB.INTERNAL_STAGES>Create or replace stage mydb.internal_stages.named_income_stage;
++-----------------------------------------------------+
+| status                                              |
+|-----------------------------------------------------|
+| Stage area NAMED_INCOME_STAGE successfully created. |
++-----------------------------------------------------+
+1 Row(s) produced. Time Elapsed: 0.427s
+SATYAKOMATI#COMPUTE_WH@MYDB.INTERNAL_STAGES>Create or replace stage mydb.internal_stages.named_house_stage;
++----------------------------------------------------+
+| status                                             |
+|----------------------------------------------------|
+| Stage area NAMED_HOUSE_STAGE successfully created. |
++----------------------------------------------------+
+1 Row(s) produced. Time Elapsed: 0.420s
+SATYAKOMATI#COMPUTE_WH@MYDB.INTERNAL_STAGES>show stages in mydb.internal_stages;
++-------------------------------+--------------------+---------------+-----------------+-----+-----------------+--------------------+--------------+---------+--------+----------+-------+----------------------+---------------------+----------+-----------------+-------------------+
+| created_on                    | name               | database_name | schema_name     | url | has_credentials | has_encryption_key | owner        | comment | region | type     | cloud | notification_channel | storage_integration | endpoint | owner_role_type | directory_enabled |
+|-------------------------------+--------------------+---------------+-----------------+-----+-----------------+--------------------+--------------+---------+--------+----------+-------+----------------------+---------------------+----------+-----------------+-------------------|
+| 2024-05-04 23:07:06.696 -0700 | NAMED_HOUSE_STAGE  | MYDB          | INTERNAL_STAGES |     | N               | N                  | ACCOUNTADMIN |         | NULL   | INTERNAL | NULL  | NULL                 | NULL                | NULL     | ROLE            | N                 |
+| 2024-05-04 23:06:49.409 -0700 | NAMED_INCOME_STAGE | MYDB          | INTERNAL_STAGES |     | N               | N                  | ACCOUNTADMIN |         | NULL   | INTERNAL | NULL  | NULL                 | NULL                | NULL     | ROLE            | N                 |
++-------------------------------+--------------------+---------------+-----------------+-----+-----------------+--------------------+--------------+---------+--------+----------+-------+----------------------+---------------------+----------+-----------------+-------------------+
+2 Row(s) produced. Time Elapsed: 0.831s
+SATYAKOMATI#COMPUTE_WH@MYDB.INTERNAL_STAGES>PUT file://D:\Snowflake\Csvfiles\income.csv @mydb.internal_stages.named_income_stage;
++------------+---------------+-------------+-------------+--------------------+--------------------+----------+---------+
+| source     | target        | source_size | target_size | source_compression | target_compression | status   | message |
+|------------+---------------+-------------+-------------+--------------------+--------------------+----------+---------|
+| income.csv | income.csv.gz |         381 |         272 | NONE               | GZIP               | UPLOADED |         |
++------------+---------------+-------------+-------------+--------------------+--------------------+----------+---------+
+1 Row(s) produced. Time Elapsed: 3.195s
+SATYAKOMATI#COMPUTE_WH@MYDB.INTERNAL_STAGES>list @named_income_stage;
++----------------------------------+------+----------------------------------+------------------------------+
+| name                             | size | md5                              | last_modified                |
+|----------------------------------+------+----------------------------------+------------------------------|
+| named_income_stage/income.csv.gz |  272 | ade14c7b2fae3db603a500851bbfd89e | Sun, 5 May 2024 06:08:36 GMT |
++----------------------------------+------+----------------------------------+------------------------------+
+1 Row(s) produced. Time Elapsed: 2.533s
+SATYAKOMATI#COMPUTE_WH@MYDB.INTERNAL_STAGES>COPY INTO mydb.public.income_table
+                                            FROM @~/staged/income.csv
+                                            file_format=(type=csv skip_header=1);
++----------------------+--------+-------------+-------------+-------------+-------------+-------------+------------------+-----------------------+-------------------------+
+| file                 | status | rows_parsed | rows_loaded | error_limit | errors_seen | first_error | first_error_line | first_error_character | first_error_column_name |
+|----------------------+--------+-------------+-------------+-------------+-------------+-------------+------------------+-----------------------+-------------------------|
+| staged/income.csv.gz | LOADED |          22 |          22 |           1 |           0 | NULL        |             NULL |                  NULL | NULL                    |
++----------------------+--------+-------------+-------------+-------------+-------------+-------------+------------------+-----------------------+-------------------------+
+1 Row(s) produced. Time Elapsed: 1.616s
+SATYAKOMATI#COMPUTE_WH@MYDB.INTERNAL_STAGES>COPY INTO mydb.public.income_table
+                                            FROM @%income_table/income.csv
+                                            file_format=(type=csv skip_header=1);
+002003 (02000): SQL compilation error:
+Stage 'MYDB.INTERNAL_STAGES."%INCOME_TABLE"' does not exist or not authorized.
+SATYAKOMATI#COMPUTE_WH@MYDB.INTERNAL_STAGES>COPY INTO mydb.public.income_table
+                                            FROM @%income_table/income.csv
+                                            file_format=(type=csv skip_header=1);
+002003 (02000): SQL compilation error:
+Stage 'MYDB.INTERNAL_STAGES."%INCOME_TABLE"' does not exist or not authorized.
+SATYAKOMATI#COMPUTE_WH@MYDB.INTERNAL_STAGES>use schema PUBLIC;
++----------------------------------+
+| status                           |
+|----------------------------------|
+| Statement executed successfully. |
++----------------------------------+
+1 Row(s) produced. Time Elapsed: 0.392s
+SATYAKOMATI#COMPUTE_WH@MYDB.PUBLIC>COPY INTO mydb.public.income_table
+                                   FROM @%income_table/income.csv
+                                   file_format=(type=csv skip_header=1);
++---------------+--------+-------------+-------------+-------------+-------------+-------------+------------------+-----------------------+-------------------------+
+| file          | status | rows_parsed | rows_loaded | error_limit | errors_seen | first_error | first_error_line | first_error_character | first_error_column_name |
+|---------------+--------+-------------+-------------+-------------+-------------+-------------+------------------+-----------------------+-------------------------|
+| income.csv.gz | LOADED |          22 |          22 |           1 |           0 | NULL        |             NULL |                  NULL | NULL                    |
++---------------+--------+-------------+-------------+-------------+-------------+-------------+------------------+-----------------------+-------------------------+
+1 Row(s) produced. Time Elapsed: 1.215s
+SATYAKOMATI#COMPUTE_WH@MYDB.PUBLIC>COPY INTO mydb.public.income_table
+                                   FROM @named_income_stage/income.csv
+                                   file_format=(type=csv skip_header=1);
+002003 (02000): SQL compilation error:
+Stage 'MYDB.PUBLIC.NAMED_INCOME_STAGE' does not exist or not authorized.
+SATYAKOMATI#COMPUTE_WH@MYDB.PUBLIC>use schema INTERNAL_STAGES;
++----------------------------------+
+| status                           |
+|----------------------------------|
+| Statement executed successfully. |
++----------------------------------+
+1 Row(s) produced. Time Elapsed: 0.384s
+SATYAKOMATI#COMPUTE_WH@MYDB.INTERNAL_STAGES>COPY INTO mydb.public.income_table
+                                            FROM @named_income_stage/income.csv
+                                            file_format=(type=csv skip_header=1);
++----------------------------------+--------+-------------+-------------+-------------+-------------+-------------+------------------+-----------------------+-------------------------+
+| file                             | status | rows_parsed | rows_loaded | error_limit | errors_seen | first_error | first_error_line | first_error_character | first_error_column_name |
+|----------------------------------+--------+-------------+-------------+-------------+-------------+-------------+------------------+-----------------------+-------------------------|
+| named_income_stage/income.csv.gz | LOADED |          22 |          22 |           1 |           0 | NULL        |             NULL |
+    NULL | NULL                    |
++----------------------------------+--------+-------------+-------------+-------------+-------------+-------------+------------------+-----------------------+-------------------------+
+1 Row(s) produced. Time Elapsed: 0.986s
+SATYAKOMATI#COMPUTE_WH@MYDB.INTERNAL_STAGES>select * from mydb.public.income_table;
++----------+-----+--------+
+| NAME     | AGE | INCOME |
+|----------+-----+--------|
+| Rob      |  27 |  70000 |
+| Michael  |  29 |  90000 |
+| Mohan    |  29 |  61000 |
+| Ismail   |  24 |  60000 |
+| Kory     |  45 | 150000 |
+| Gautam   |  67 | 155000 |
+| David    |  25 | 160000 |
+| Andrea   |  45 | 162000 |
+| Brad     |  34 | 156000 |
+| Angelina |  35 | 130000 |
+| Donald   |  35 | 137000 |
+| Tom      |  37 |  45000 |
+| Arnold   |  45 |  48000 |
+| Jared    |  28 |  51000 |
+| Stark    |  29 |  49500 |
+| Ranbir   |  32 |  53000 |
+| Dipika   |  40 |  65000 |
+| Priyanka |  41 |  63000 |
+| Nick     |  43 |  64000 |
+| Alia     |  39 |  80000 |
+| Sid      |  41 |  82000 |
+| Abdul    |  39 |  58000 |
+| Rob      |  27 |  70000 |
+| Michael  |  29 |  90000 |
+| Mohan    |  29 |  61000 |
+| Ismail   |  24 |  60000 |
+| Kory     |  45 | 150000 |
+| Gautam   |  67 | 155000 |
+| David    |  25 | 160000 |
+| Andrea   |  45 | 162000 |
+| Brad     |  34 | 156000 |
+| Angelina |  35 | 130000 |
+| Donald   |  35 | 137000 |
+| Tom      |  37 |  45000 |
+| Arnold   |  45 |  48000 |
+| Jared    |  28 |  51000 |
+| Stark    |  29 |  49500 |
+| Ranbir   |  32 |  53000 |
+| Dipika   |  40 |  65000 |
+| Priyanka |  41 |  63000 |
+| Nick     |  43 |  64000 |
+| Alia     |  39 |  80000 |
+| Sid      |  41 |  82000 |
+| Abdul    |  39 |  58000 |
+| Rob      |  27 |  70000 |
+| Michael  |  29 |  90000 |
+| Mohan    |  29 |  61000 |
+| Ismail   |  24 |  60000 |
+| Kory     |  45 | 150000 |
+| Gautam   |  67 | 155000 |
+| David    |  25 | 160000 |
+| Andrea   |  45 | 162000 |
+| Brad     |  34 | 156000 |
+| Angelina |  35 | 130000 |
+| Donald   |  35 | 137000 |
+| Tom      |  37 |  45000 |
+| Arnold   |  45 |  48000 |
+| Jared    |  28 |  51000 |
+| Stark    |  29 |  49500 |
+| Ranbir   |  32 |  53000 |
+| Dipika   |  40 |  65000 |
+| Priyanka |  41 |  63000 |
+| Nick     |  43 |  64000 |
+| Alia     |  39 |  80000 |
+| Sid      |  41 |  82000 |
+| Abdul    |  39 |  58000 |
++----------+-----+--------+
+66 Row(s) produced. Time Elapsed: 0.697s
+SATYAKOMATI#COMPUTE_WH@MYDB.INTERNAL_STAGES>
